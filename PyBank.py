@@ -29,7 +29,7 @@ with open(csvpath, newline='') as csvfile:
     #Start the for loop for each row in the csvreader
     for row in csvreader:
 
-        #Row count defines first variable as row_count and set value for each row in csvpath
+        #set profit/loss framework/benchmark
         row_count = row_count+1
         total_sum = float(total_sum)+float(row[1])
         current_total = row[1]
@@ -37,14 +37,15 @@ with open(csvpath, newline='') as csvfile:
         total_var_overall = total_var_overall+total_var
         last_total = row[1]
 
-
+        #calculate greatest increase in profits plus last line record month
         if total_var > top_total_change:
             top_total_change = total_var
             top_total_month= row[0]
+        #calculate greatest decrease in profits plus last line record month
         if total_var < low_total_change:
             low_total_change = total_var
             low_total_month= row[0]
-            
+    #find the overall average change per each row or month        
     avg_total_var = total_var_overall/row_count
 
 #print all of you results 
@@ -57,5 +58,20 @@ print(f"Greatest Increase in Profits: {top_total_month} ${round(top_total_change
 print(f"Greatest Decrease in Profits: {low_total_month} ${round(low_total_change)}")
 
 
+#name the file you will export
+write_file = f"pybank_analysis_results.txt"
 
+#open the file to begin to write to the file
+filewriter = open(write_file, mode = 'w')
 
+#write/print analysis to file
+filewriter.write(f"Financial Analysis")
+filewriter.write("-------------------------------------------------------\n")
+filewriter.write(f"Total Months: {row_count}\n")
+filewriter.write(f"Total: ${round(total_sum)}\n")
+filewriter.write(f"Average Total Change: ${round(avg_total_var,2)}\n")
+filewriter.write(f"Greatest Increase in Profits: {top_total_month} ${round(top_total_change)}\n")
+filewriter.write(f"Greatest Decrease in Profits: {low_total_month} ${round(low_total_change)}\n")
+
+#close file
+filewriter.close()
